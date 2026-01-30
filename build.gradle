@@ -1,0 +1,23 @@
+plugins {
+    id 'groovy'
+    id 'application'
+}
+
+group = 'com.awangelo'
+version = '1.0-SNAPSHOT'
+
+application {
+    mainClass = 'com.awangelo.Main'
+}
+
+run {
+    standardInput = System.in
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.groovy:groovy:5.0.0'
+}
