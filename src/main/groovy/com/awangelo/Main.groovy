@@ -2,19 +2,25 @@ package com.awangelo
 
 import com.awangelo.model.Candidato
 import com.awangelo.model.Empresa
+import com.awangelo.model.Vaga
+import com.awangelo.model.Curtida
 import com.awangelo.model.Competencia
 import com.awangelo.service.CandidatoService
 import com.awangelo.service.EmpresaService
+import com.awangelo.service.VagaService
+import com.awangelo.service.CurtidaService
 
 class Main {
     static CandidatoService candidatoService = new CandidatoService()
     static EmpresaService empresaService = new EmpresaService()
+    static VagaService vagaService = new VagaService(empresaService)
+    static CurtidaService curtidaService = new CurtidaService()
     static Scanner scanner = new Scanner(System.in)
 
     static void main() {
         int opcao = 0
 
-        while (opcao != 5) {
+        while (opcao != 9) {
             exibirMenu()
             opcao = lerOpcao()
 
@@ -26,12 +32,24 @@ class Main {
                     listarEmpresas()
                     break
                 case 3:
-                    cadastrarCandidato()
+                    listarVagas()
                     break
                 case 4:
-                    cadastrarEmpresa()
+                    cadastrarCandidato()
                     break
                 case 5:
+                    cadastrarEmpresa()
+                    break
+                case 6:
+                    cadastrarVaga()
+                    break
+                case 7:
+                    curtirVaga()
+                    break
+                case 8:
+                    curtirCandidato()
+                    break
+                case 9:
                     println "Saindo..."
                     break
                 default:
@@ -44,9 +62,13 @@ class Main {
         println "\n=== LINKETINDER ==="
         println "1. Listar Candidatos"
         println "2. Listar Empresas"
-        println "3. Cadastrar Candidato"
-        println "4. Cadastrar Empresa"
-        println "5. Sair"
+        println "3. Listar Vagas"
+        println "4. Cadastrar Candidato"
+        println "5. Cadastrar Empresa"
+        println "6. Cadastrar Vaga"
+        println "7. Curtir Vaga (Candidato)"
+        println "8. Curtir Candidato (Empresa)"
+        println "9. Sair"
         print "Escolha uma opcao: "
     }
 
@@ -178,5 +200,143 @@ class Main {
         }
 
         return selecionadas
+    }
+
+    static void listarVagas() {
+        println "\n=== VAGAS ==="
+        vagaService.listarTodos().each { vaga ->
+            println "\n--- Vaga ${vaga.id} ---"
+            println vaga
+        }
+    }
+
+    static void cadastrarVaga() {
+        println "\n=== CADASTRAR VAGA ==="
+
+        println "\nSelecione a empresa:"
+        empresaService.listarTodos().each { empresa ->
+            println "${empresa.id}. ${empresa.nome}"
+        }
+        print "ID da Empresa: "
+        Integer empresaId = lerOpcao()
+        Empresa empresa = empresaService.buscarPorId(empresaId)
+
+        if (!empresa) {
+            println "Empresa nao encontrada!"
+            return
+        }
+
+        print "Nome da vaga: "
+        String nome = scanner.nextLine()
+
+        print "Descricao: "
+        String descricao = scanner.nextLine()
+
+        print "Local (estado): "
+        String local = scanner.nextLine()
+
+        List<Competencia> competencias = selecionarCompetencias()
+
+        Vaga vaga = new Vaga(
+            nome: nome,
+            descricao: descricao,
+            local: local,
+            empresa: empresa,
+            competencias: competencias
+        )
+
+        vagaService.adicionar(vaga)
+        println "\nVaga cadastrada com sucesso!"
+    }
+
+    static void curtirVaga() {
+        println "\n=== CURTIR VAGA (CANDIDATO) ==="
+
+        println "\nSelecione o candidato:"
+        candidatoService.listarTodos().each { candidato ->
+            println "${candidato.id}. ${candidato.nome}"
+        }
+        print "ID do Candidato: "
+        Integer candidatoId = lerOpcao()
+        Candidato candidato = candidatoService.buscarPorId(candidatoId)
+
+        if (!candidato) {
+            println "Candidato nao encontrado!"
+            return
+        }
+
+        println "\nVagas disponiveis:"
+        vagaService.listarTodos().each { vaga ->
+            println "${vaga.id}. ${vaga.nome} - ${vaga.empresa?.nome}"
+        }
+        print "ID da Vaga: "
+        Integer vagaId = lerOpcao()
+        Vaga vaga = vagaService.buscarPorId(vagaId)
+
+        if (!vaga) {
+            println "Vaga nao encontrada!"
+            return
+        }
+
+        Curtida curtida = curtidaService.candidatoCurteVaga(candidato, vaga)
+        println "\nCurtida registrada!"
+        if (curtida.isMatch()) {
+            println "*** MATCH! ${candidato.nome} e ${vaga.empresa?.nome} deram match! ***"
+        }
+    }
+
+    static void curtirCandidato() {
+        println "\n=== CURTIR CANDIDATO (EMPRESA) ==="
+
+        println "\nSelecione a empresa:"
+        empresaService.listarTodos().each { empresa ->
+            println "${empresa.id}. ${empresa.nome}"
+        }
+        print "ID da Empresa: "
+        Integer empresaId = lerOpcao()
+        Empresa empresa = empresaService.buscarPorId(empresaId)
+
+        if (!empresa) {
+            println "Empresa nao encontrada!"
+            return
+        }
+
+        List<Vaga> vagasDaEmpresa = vagaService.buscarPorEmpresa(empresa)
+        if (vagasDaEmpresa.isEmpty()) {
+            println "Esta empresa nao possui vagas cadastradas!"
+            return
+        }
+
+        println "\nSelecione a vaga:"
+        vagasDaEmpresa.each { vaga ->
+            println "${vaga.id}. ${vaga.nome}"
+        }
+        print "ID da Vaga: "
+        Integer vagaId = lerOpcao()
+        Vaga vaga = vagaService.buscarPorId(vagaId)
+
+        if (!vaga || vaga.empresa?.id != empresa.id) {
+            println "Vaga nao encontrada ou nao pertence a esta empresa!"
+            return
+        }
+
+        println "\nCandidatos disponiveis:"
+        candidatoService.listarTodos().each { candidato ->
+            println "${candidato.id}. ${candidato.nome} - ${candidato.competencias.join(', ')}"
+        }
+        print "ID do Candidato: "
+        Integer candidatoId = lerOpcao()
+        Candidato candidato = candidatoService.buscarPorId(candidatoId)
+
+        if (!candidato) {
+            println "Candidato nao encontrado!"
+            return
+        }
+
+        Curtida curtida = curtidaService.empresaCurteCandidato(empresa, candidato, vaga)
+        println "\nCurtida registrada!"
+        if (curtida.isMatch()) {
+            println "*** MATCH! ${candidato.nome} e ${empresa.nome} deram match! ***"
+        }
     }
 }
