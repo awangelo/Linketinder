@@ -5,6 +5,7 @@ import com.awangelo.model.Competencia
 
 class EmpresaService {
     private List<Empresa> empresas = []
+    private Integer proximoId = 1
 
     EmpresaService() {
         carregarDadosIniciais()
@@ -13,6 +14,7 @@ class EmpresaService {
     private void carregarDadosIniciais() {
         empresas = [
             new Empresa(
+                id: proximoId++,
                 nome: "Arroz Gostoso",
                 email: "rh@arrozgostoso.com.br",
                 cnpj: "12345678000111",
@@ -23,6 +25,7 @@ class EmpresaService {
                 competencias: [Competencia.JAVA, Competencia.SPRING_FRAMEWORK, Competencia.SQL]
             ),
             new Empresa(
+                id: proximoId++,
                 nome: "Imperio do Boliche",
                 email: "contato@imperioboliche.com.br",
                 cnpj: "23456789000222",
@@ -33,6 +36,7 @@ class EmpresaService {
                 competencias: [Competencia.JAVASCRIPT, Competencia.REACT, Competencia.MONGODB]
             ),
             new Empresa(
+                id: proximoId++,
                 nome: "Brocrosoft",
                 email: "rh@brocrosoft.com",
                 cnpj: "34567890000333",
@@ -43,6 +47,7 @@ class EmpresaService {
                 competencias: [Competencia.PYTHON, Competencia.AWS, Competencia.SQL]
             ),
             new Empresa(
+                id: proximoId++,
                 nome: "DevMaster",
                 email: "sandubinha@devmaster.com",
                 cnpj: "45678901000444",
@@ -53,6 +58,7 @@ class EmpresaService {
                 competencias: [Competencia.GROOVY, Competencia.JAVA, Competencia.ANGULAR]
             ),
             new Empresa(
+                id: proximoId++,
                 nome: "Caixa",
                 email: "contato@caixa.com",
                 cnpj: "56789012000555",
@@ -69,7 +75,12 @@ class EmpresaService {
         return empresas
     }
 
+    Empresa buscarPorId(Integer id) {
+        return empresas.find { it.id == id }
+    }
+
     void adicionar(Empresa empresa) {
+        empresa.id = proximoId++
         empresas.add(empresa)
     }
 }

@@ -1,6 +1,7 @@
 package com.awangelo.model
 
 class Empresa implements Entidade {
+    Integer id
     String cnpj
     String pais
 
@@ -11,6 +12,7 @@ class Empresa implements Entidade {
     @Override
     String toString() {
         return """
+            ID: ${id}
             Nome: ${nome}
             Email Corporativo: ${email}
             CNPJ: ${cnpj}

@@ -1,6 +1,7 @@
 package com.awangelo.model
 
 class Candidato implements Entidade {
+    Integer id
     String cpf
     Integer idade
 
@@ -11,6 +12,7 @@ class Candidato implements Entidade {
     @Override
     String toString() {
         return """
+            ID: ${id}
             Nome: ${nome}
             Email: ${email}
             CPF: ${cpf}

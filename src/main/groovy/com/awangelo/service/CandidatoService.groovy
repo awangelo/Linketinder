@@ -5,6 +5,7 @@ import com.awangelo.model.Competencia
 
 class CandidatoService {
     private List<Candidato> candidatos = []
+    private Integer proximoId = 1
 
     CandidatoService() {
         carregarDadosIniciais()
@@ -13,6 +14,7 @@ class CandidatoService {
     private void carregarDadosIniciais() {
         candidatos = [
             new Candidato(
+                id: proximoId++,
                 nome: "Alice Liddell",
                 email: "alice.liddell@mail.com",
                 cpf: "12345678901",
@@ -23,6 +25,7 @@ class CandidatoService {
                 competencias: [Competencia.JAVA, Competencia.SPRING_FRAMEWORK, Competencia.SQL]
             ),
             new Candidato(
+                id: proximoId++,
                 nome: "Joao Pereira",
                 email: "joao.pereira@mail.com",
                 cpf: "23456789012",
@@ -33,6 +36,7 @@ class CandidatoService {
                 competencias: [Competencia.JAVASCRIPT, Competencia.REACT, Competencia.MONGODB]
             ),
             new Candidato(
+                id: proximoId++,
                 nome: "Felipe Silva",
                 email: "felipe.silva@mail.com",
                 cpf: "34567890123",
@@ -43,6 +47,7 @@ class CandidatoService {
                 competencias: [Competencia.PYTHON, Competencia.SQL, Competencia.AWS]
             ),
             new Candidato(
+                id: proximoId++,
                 nome: "Matheus",
                 email: "matheus@mail.com",
                 cpf: "45678901234",
@@ -53,6 +58,7 @@ class CandidatoService {
                 competencias: [Competencia.GROOVY, Competencia.JAVA, Competencia.SPRING_FRAMEWORK]
             ),
             new Candidato(
+                id: proximoId++,
                 nome: "Pedro",
                 email: "pedro@mail.com",
                 cpf: "56789012345",
@@ -69,7 +75,12 @@ class CandidatoService {
         return candidatos
     }
 
+    Candidato buscarPorId(Integer id) {
+        return candidatos.find { it.id == id }
+    }
+
     void adicionar(Candidato candidato) {
+        candidato.id = proximoId++
         candidatos.add(candidato)
     }
 }
