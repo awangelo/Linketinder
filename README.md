@@ -18,9 +18,4 @@ src/
 └── service/  # Lógica de negócio
 ```
 
-
-
-### Observações
-- 
-
 Feito por Ângelo.
