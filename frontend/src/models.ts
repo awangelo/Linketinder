@@ -29,3 +29,8 @@ export interface Vaga {
   descricao: string
   competencias: string[]
 }
+
+export interface CurrentUser {
+  type: 'candidato' | 'empresa'
+  id: number
+}

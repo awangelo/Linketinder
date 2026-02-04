@@ -1,8 +1,10 @@
 import { Storage } from '../storage.js'
+import { calculateAffinity } from '../affinity.js'
 import { renderCompetenciasChart } from '../charts.js'
 
 export function renderPerfilEmpresa(): string {
   const candidatos = Storage.getCandidatos()
+  const currentUser = Storage.getCurrentUser()
   
   if (candidatos.length === 0) {
     return `
@@ -22,27 +24,37 @@ export function renderPerfilEmpresa(): string {
     `
   }
   
-  const candidatosHtml = candidatos.map(c => `
-    <tr>
-      <td class="tooltip">
-        Candidato Anônimo
-        <div class="tooltip-content">
-          Idade: ${c.idade} anos<br>
-          Estado: ${c.estado}<br>
-          Descrição: ${c.descricao}
-        </div>
-      </td>
-      <td>
-        <div class="competencias">
-          ${c.competencias.map(comp => `<span class="tag">${comp}</span>`).join('')}
-        </div>
-      </td>
-      <td>${c.descricao.substring(0, 50)}${c.descricao.length > 50 ? '...' : ''}</td>
-      <td>
-        <button class="danger" onclick="window.deleteCandidato(${c.id})">Excluir</button>
-      </td>
-    </tr>
-  `).join('')
+  const candidatosHtml = candidatos.map(c => {
+    let affinityText = ''
+    if (currentUser && currentUser.type === 'empresa') {
+      const empresa = Storage.getEmpresas().find(e => e.id === currentUser.id)
+      if (empresa) {
+        const affinity = calculateAffinity(c.competencias, empresa.competencias)
+        affinityText = `<br><small>Afinidade: ${affinity}%</small>`
+      }
+    }
+    return `
+      <tr>
+        <td class="tooltip">
+          Candidato Anônimo
+          <div class="tooltip-content">
+            Idade: ${c.idade} anos<br>
+            Estado: ${c.estado}<br>
+            Descrição: ${c.descricao}
+          </div>
+        </td>
+        <td>
+          <div class="competencias">
+            ${c.competencias.map(comp => `<span class="tag">${comp}</span>`).join('')}
+          </div>
+        </td>
+        <td>${c.descricao.substring(0, 50)}${c.descricao.length > 50 ? '...' : ''}${affinityText}</td>
+        <td>
+          <button class="danger" onclick="window.deleteCandidato(${c.id})">Excluir</button>
+        </td>
+      </tr>
+    `
+  }).join('')
   
   return `
     <div class="card">

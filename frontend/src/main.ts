@@ -1,4 +1,4 @@
-import { renderHome } from './views/home.js'
+import { renderHome, setupHome } from './views/home.js'
 import { renderCadastroCandidato, setupCadastroCandidato } from './views/cadastroCandidato.js'
 import { renderCadastroEmpresa, setupCadastroEmpresa } from './views/cadastroEmpresa.js'
 import { renderPerfilCandidato, setupPerfilCandidato } from './views/perfilCandidato.js'
@@ -11,7 +11,7 @@ type Route = {
 
 // Router
 const routes: Record<string, Route> = {
-  '/': { render: renderHome },
+  '/': { render: renderHome, setup: setupHome },
   '/cadastro/candidato': { render: renderCadastroCandidato, setup: setupCadastroCandidato },
   '/cadastro/empresa': { render: renderCadastroEmpresa, setup: setupCadastroEmpresa },
   '/perfil/candidato': { render: renderPerfilCandidato, setup: setupPerfilCandidato },

@@ -1,10 +1,11 @@
-import { Candidato, Empresa, Vaga } from './models.js'
+import { Candidato, Empresa, Vaga, CurrentUser } from './models.js'
 
 export namespace Storage {
   const KEYS = {
     candidatos: 'linketinder_candidatos',
     empresas: 'linketinder_empresas',
-    vagas: 'linketinder_vagas'
+    vagas: 'linketinder_vagas',
+    currentUser: 'linketinder_current_user'
   }
 
   // Candidatos
@@ -63,5 +64,19 @@ export namespace Storage {
   export function deleteVaga(id: number): void {
     const vagas = getVagas().filter(v => v.id !== id)
     localStorage.setItem(KEYS.vagas, JSON.stringify(vagas))
+  }
+
+  // Current User
+  export function getCurrentUser(): CurrentUser | null {
+    const data = localStorage.getItem(KEYS.currentUser)
+    return data ? JSON.parse(data) : null
+  }
+
+  export function setCurrentUser(user: CurrentUser): void {
+    localStorage.setItem(KEYS.currentUser, JSON.stringify(user))
+  }
+
+  export function clearCurrentUser(): void {
+    localStorage.removeItem(KEYS.currentUser)
   }
 }

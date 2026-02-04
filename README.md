@@ -24,7 +24,7 @@ src/
 - Chart.js (CDN)
 
 ### Features TypeScript Utilizadas
-- Interfaces para tipagem de dados (Candidato, Empresa, Vaga)
+- Interfaces para tipagem de dados (Candidato, Empresa, Vaga, CurrentUser)
 - Namespace para organização das funções de armazenamento
 - Generics com Omit para operações de criação
 - Type assertions para manipulação do DOM

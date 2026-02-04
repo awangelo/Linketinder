@@ -1,8 +1,10 @@
 import { Storage } from '../storage.js'
+import { calculateAffinity } from '../affinity.js'
 
 export function renderPerfilCandidato(): string {
   const vagas = Storage.getVagas()
   const empresas = Storage.getEmpresas()
+  const currentUser = Storage.getCurrentUser()
   
   if (vagas.length === 0) {
     return `
@@ -18,11 +20,20 @@ export function renderPerfilCandidato(): string {
   
   const vagasHtml = vagas.map(v => {
     const empresa = empresas.find(e => e.id === v.empresaId)
+    let affinityText = ''
+    if (currentUser && currentUser.type === 'candidato') {
+      const candidato = Storage.getCandidatos().find(c => c.id === currentUser.id)
+      if (candidato && empresa) {
+        const affinity = calculateAffinity(candidato.competencias, empresa.competencias)
+        affinityText = `<br><small>Afinidade: ${affinity}%</small>`
+      }
+    }
     return `
       <tr>
         <td>
           <strong>${v.nome}</strong>
           <br><small>${v.descricao}</small>
+          ${affinityText}
         </td>
         <td class="tooltip">
           Empresa Anônima
