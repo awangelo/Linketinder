@@ -1,4 +1,5 @@
 import { Storage } from '../storage.js'
+import { validateNome, validateEmail, validateCNPJ, validateCEP, validateTags, TAGS_PADRONIZADAS } from '../validation.js'
 
 export function renderCadastroEmpresa(): string {
   return `
@@ -34,8 +35,11 @@ export function renderCadastroEmpresa(): string {
           <textarea id="descricao" rows="3" required></textarea>
         </div>
         <div class="form-group">
-          <label for="competencias">Competências buscadas (separadas por vírgula)</label>
-          <input type="text" id="competencias" required placeholder="JavaScript, Python, SQL">
+          <label for="competencias">Competências buscadas</label>
+          <select id="competencias" multiple required>
+            ${TAGS_PADRONIZADAS.map(tag => `<option value="${tag}">${tag}</option>`).join('')}
+          </select>
+          <small>Ctrl + Click para selecionar múltiplas</small>
         </div>
         <button type="submit">Cadastrar Empresa</button>
         <div id="mensagem"></div>
@@ -78,16 +82,45 @@ export function setupCadastroEmpresa(): void {
       e.preventDefault()
     
       const getValue = (id: string) => (document.getElementById(id) as HTMLInputElement).value.trim()
+      const getSelectValues = (id: string) => {
+        const select = document.getElementById(id) as HTMLSelectElement
+        return Array.from(select.selectedOptions).map(option => option.value)
+      }
+      
+      const nome = getValue('nome')
+      const email = getValue('email')
+      const cnpj = getValue('cnpj')
+      const pais = getValue('pais')
+      const estado = getValue('estado')
+      const cep = getValue('cep')
+      const descricao = getValue('descricao')
+      const competencias = getSelectValues('competencias')
+      
+      // Validações
+      const nomeError = validateNome(nome)
+      if (nomeError) { alert(`Erro no nome: ${nomeError}`); return }
+      
+      const emailError = validateEmail(email)
+      if (emailError) { alert(`Erro no e-mail: ${emailError}`); return }
+      
+      const cnpjError = validateCNPJ(cnpj)
+      if (cnpjError) { alert(`Erro no CNPJ: ${cnpjError}`); return }
+      
+      const cepError = validateCEP(cep)
+      if (cepError) { alert(`Erro no CEP: ${cepError}`); return }
+      
+      const tagsError = validateTags(competencias)
+      if (tagsError) { alert(`Erro nas competências: ${tagsError}`); return }
       
       const empresa = {
-        nome: getValue('nome'),
-        email: getValue('email'),
-        cnpj: getValue('cnpj'),
-        pais: getValue('pais'),
-        estado: getValue('estado'),
-        cep: getValue('cep'),
-        descricao: getValue('descricao'),
-        competencias: getValue('competencias').split(',').map(c => c.trim()).filter(c => c)
+        nome,
+        email,
+        cnpj,
+        pais,
+        estado,
+        cep,
+        descricao,
+        competencias
       }
       
       Storage.saveEmpresa(empresa)

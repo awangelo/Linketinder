@@ -1,4 +1,5 @@
 import { Storage } from '../storage.js'
+import { validateNome, validateEmail, validateCPF, validateTelefone, validateLinkedIn, validateCEP, validateTags, TAGS_PADRONIZADAS } from '../validation.js'
 
 export function renderCadastroCandidato(): string {
   return `
@@ -15,7 +16,15 @@ export function renderCadastroCandidato(): string {
         </div>
         <div class="form-group">
           <label for="cpf">CPF</label>
-          <input type="text" id="cpf" required placeholder="000.000.000-00">
+          <input type="text" id="cpf" required placeholder="000.000.000-00 ou 00000000000">
+        </div>
+        <div class="form-group">
+          <label for="telefone">Telefone</label>
+          <input type="text" id="telefone" required placeholder="(11) 99999-9999">
+        </div>
+        <div class="form-group">
+          <label for="linkedin">LinkedIn</label>
+          <input type="url" id="linkedin" required placeholder="https://linkedin.com/in/perfil">
         </div>
         <div class="form-group">
           <label for="idade">Idade</label>
@@ -34,8 +43,11 @@ export function renderCadastroCandidato(): string {
           <textarea id="descricao" rows="3" required></textarea>
         </div>
         <div class="form-group">
-          <label for="competencias">Competências (separadas por vírgula)</label>
-          <input type="text" id="competencias" required placeholder="JavaScript, Python, SQL">
+          <label for="competencias">Competências</label>
+          <select id="competencias" multiple required>
+            ${TAGS_PADRONIZADAS.map(tag => `<option value="${tag}">${tag}</option>`).join('')}
+          </select>
+          <small>Ctrl + Click para selecionar múltiplas</small>
         </div>
         <button type="submit">Cadastrar</button>
         <div id="mensagem"></div>
@@ -52,16 +64,54 @@ export function setupCadastroCandidato(): void {
     e.preventDefault()
     
     const getValue = (id: string) => (document.getElementById(id) as HTMLInputElement).value.trim()
+    const getSelectValues = (id: string) => {
+      const select = document.getElementById(id) as HTMLSelectElement
+      return Array.from(select.selectedOptions).map(option => option.value)
+    }
+    
+    const nome = getValue('nome')
+    const email = getValue('email')
+    const cpf = getValue('cpf')
+    const telefone = getValue('telefone')
+    const linkedin = getValue('linkedin')
+    const idade = parseInt(getValue('idade'))
+    const estado = getValue('estado')
+    const cep = getValue('cep')
+    const descricao = getValue('descricao')
+    const competencias = getSelectValues('competencias')
+    
+    const nomeError = validateNome(nome)
+    if (nomeError) { alert(`Erro no nome: ${nomeError}`); return }
+    
+    const emailError = validateEmail(email)
+    if (emailError) { alert(`Erro no e-mail: ${emailError}`); return }
+    
+    const cpfError = validateCPF(cpf)
+    if (cpfError) { alert(`Erro no CPF: ${cpfError}`); return }
+    
+    const telefoneError = validateTelefone(telefone)
+    if (telefoneError) { alert(`Erro no telefone: ${telefoneError}`); return }
+    
+    const linkedinError = validateLinkedIn(linkedin)
+    if (linkedinError) { alert(`Erro no LinkedIn: ${linkedinError}`); return }
+    
+    const cepError = validateCEP(cep)
+    if (cepError) { alert(`Erro no CEP: ${cepError}`); return }
+    
+    const tagsError = validateTags(competencias)
+    if (tagsError) { alert(`Erro nas competências: ${tagsError}`); return }
     
     const candidato = {
-      nome: getValue('nome'),
-      email: getValue('email'),
-      cpf: getValue('cpf'),
-      idade: parseInt(getValue('idade')),
-      estado: getValue('estado'),
-      cep: getValue('cep'),
-      descricao: getValue('descricao'),
-      competencias: getValue('competencias').split(',').map(c => c.trim()).filter(c => c)
+      nome,
+      email,
+      cpf,
+      telefone,
+      linkedin,
+      idade,
+      estado,
+      cep,
+      descricao,
+      competencias
     }
     
     Storage.saveCandidato(candidato)

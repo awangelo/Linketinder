@@ -29,6 +29,7 @@ src/
 - Generics com Omit para operações de criação
 - Type assertions para manipulação do DOM
 - Módulos ES6 para importação/exportação
+- Validações utilizando regex nativo do TypeScript
 
 ### Como Executar
 1. Compile o TypeScript com `tsc`
