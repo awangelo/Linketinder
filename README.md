@@ -51,4 +51,10 @@ docker-compose up -d
 docker exec -it linketinder_postgres psql -U admin -d linketinder # Testar queries
 ```
 
+#### Logica de Match
+A tabela `curtida` possui uma coluna `origem_curtida` que permite apenas os valores `'CANDIDATO'` ou `'EMPRESA'`.
+- Quando um candidato curte uma vaga, um registro é inserido com `origem_curtida = 'CANDIDATO'`.
+- Quando a empresa curte um candidato para uma vaga específica, um novo registro é inserido com `origem_curtida = 'EMPRESA'`.
+- O match ocorre quando existem dois registros na tabela `curtida` com o mesmo `candidato_id` e `vaga_id`, mas com origens opostas (Ex: `(1, 1, 'CANDIDATO'), (1, 1, 'EMPRESA')`).
+
 Feito por Ângelo.
