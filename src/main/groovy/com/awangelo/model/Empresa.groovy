@@ -3,7 +3,7 @@ package com.awangelo.model
 class Empresa implements Entidade {
     Integer id
     String cnpj
-    String pais
+    String senha
 
     boolean validarCnpj() {
         return cnpj?.replaceAll("[^0-9]", "")?.length() == 14

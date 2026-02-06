@@ -4,7 +4,7 @@ class Vaga {
     Integer id
     String nome
     String descricao
-    String local
+    String localVaga
     Empresa empresa
     List<Competencia> competencias = []
 
@@ -14,7 +14,7 @@ class Vaga {
             ID: ${id}
             Nome: ${nome}
             Descricao: ${descricao}
-            Local: ${local}
+            Local: ${localVaga}
             Empresa: ${empresa?.nome}
             Competencias: ${competencias.join(", ")}
             """.stripIndent()

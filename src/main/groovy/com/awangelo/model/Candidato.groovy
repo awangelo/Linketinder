@@ -1,22 +1,37 @@
 package com.awangelo.model
 
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
+
 class Candidato implements Entidade {
     Integer id
+    String sobrenome
     String cpf
-    Integer idade
+    LocalDate dataNascimento
+    String senha
+    String telefone
+    String linkedin
 
     boolean validarCpf() {
         return cpf?.replaceAll("[^0-9]", "")?.length() == 11
     }
 
+    Integer getIdade() {
+        if (!dataNascimento) return null
+        return Period.between(dataNascimento, LocalDate.now()).years
+    }
+
     @Override
     String toString() {
+        String dt = dataNascimento ? dataNascimento.format(DateTimeFormatter.ISO_DATE) : ""
         return """
             ID: ${id}
-            Nome: ${nome}
+            Nome: ${nome} ${sobrenome ?: ''}
             Email: ${email}
             CPF: ${cpf}
-            Idade: ${idade}
+            Idade: ${getIdade()}
+            Data Nascimento: ${dt}
             Estado: ${estado}
             CEP: ${cep}
             Descricao: ${descricao}

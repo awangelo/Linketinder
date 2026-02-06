@@ -4,19 +4,22 @@ class Curtida {
     Integer id
     Candidato candidato
     Vaga vaga
-    Empresa empresa
+    String origemCurtida  // 'CANDIDATO' ou 'EMPRESA'
 
     boolean isMatch() {
-        return candidato != null && empresa != null
+        // Match ocorre quando existe curtida do candidato E da empresa para mesma vaga.
+        // Verificado no DAO/Service.
+        return candidato != null && vaga != null
     }
 
     @Override
     String toString() {
         return """
+            ID: ${id}
             Candidato: ${candidato?.nome}
             Vaga: ${vaga?.nome}
-            Empresa: ${empresa?.nome}
-            Match: ${isMatch() ? "Sim" : "Nao"}
+            Empresa: ${vaga?.empresa?.nome}
+            Origem: ${origemCurtida}
             """.stripIndent()
     }
 }

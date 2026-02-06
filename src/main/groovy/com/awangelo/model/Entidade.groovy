@@ -3,6 +3,7 @@ package com.awangelo.model
 trait Entidade {
     String nome
     String email
+    String pais
     String estado
     String cep
     String descricao
