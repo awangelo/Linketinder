@@ -36,4 +36,19 @@ src/
 2. Abra o arquivo `frontend/index.html` com um servidor local (ex: Live Server)
 3. Os dados são salvos automaticamente no localStorage
 
+## Banco de Dados
+
+![diagrama](db/diagrama.png)
+
+### Tecnologias Utilizadas
+- PostgreSQL
+- Docker (Compose)
+
+### Como Executar
+```bash
+cd db
+docker-compose up -d
+docker exec -it linketinder_postgres psql -U admin -d linketinder # Testar queries
+```
+
 Feito por Ângelo.
