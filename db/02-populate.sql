@@ -1,5 +1,5 @@
 INSERT INTO competencia (nome) VALUES 
-('Java'), ('Spring Framework'), ('SQL'), ('JavaScript'), ('React'), ('MongoDB'), ('Python'), ('AWS'), ('Groovy'), ('Angular');
+('JAVA'), ('SPRING_FRAMEWORK'), ('SQL'), ('JAVASCRIPT'), ('REACT'), ('MONGODB'), ('PYTHON'), ('AWS'), ('GROOVY'), ('ANGULAR');
 
 INSERT INTO candidato (nome, sobrenome, data_nascimento, email, cpf, pais, estado, cep, descricao, senha) VALUES
 ('Alice', 'Liddell', '1997-01-01', 'alice.liddell@mail.com', '12345678901', 'Brasil', 'SP', '01310103', 'Desenvolvedora backend com 3 anos de experiencia', '123456'),
