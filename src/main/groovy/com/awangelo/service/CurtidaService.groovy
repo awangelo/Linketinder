@@ -4,62 +4,60 @@ import com.awangelo.model.Curtida
 import com.awangelo.model.Candidato
 import com.awangelo.model.Empresa
 import com.awangelo.model.Vaga
+import com.awangelo.dao.CurtidaDAO
 
 class CurtidaService {
-    private List<Curtida> curtidas = []
-    private Integer proximoId = 1
+    private CurtidaDAO curtidaDAO = new CurtidaDAO()
 
     Curtida candidatoCurteVaga(Candidato candidato, Vaga vaga) {
-        Curtida curtidaExistente = curtidas.find {
-            it.candidato?.id == candidato.id && it.vaga?.id == vaga.id
+        if (!candidato?.id || !vaga?.id) {
+            throw new IllegalArgumentException("Candidato ou Vaga invalidos")
         }
-
-        if (curtidaExistente) {
-            return curtidaExistente
-        }
-
-        Curtida curtida = new Curtida(
-            id: proximoId++,
+        def result = curtidaDAO.inserirCurtida(candidato.id, vaga.id, 'CANDIDATO')
+        def curtida = new Curtida(
+            id: result.id as Integer,
             candidato: candidato,
-            vaga: vaga
+            vaga: vaga,
+            origemCurtida: 'CANDIDATO'
         )
-        curtidas.add(curtida)
+
+        if (result.isMatch) {
+            curtida.origemCurtida = 'MATCH'
+        }
         return curtida
     }
 
     Curtida empresaCurteCandidato(Empresa empresa, Candidato candidato, Vaga vaga) {
-        Curtida curtidaExistente = curtidas.find {
-            it.candidato?.id == candidato.id && it.vaga?.id == vaga.id
+        if (!candidato?.id || !vaga?.id) {
+            throw new IllegalArgumentException("Candidato ou Vaga invalidos")
         }
-
-        if (curtidaExistente) {
-            curtidaExistente.empresa = empresa
-            return curtidaExistente
-        }
-
-        Curtida curtida = new Curtida(
-            id: proximoId++,
+        def result = curtidaDAO.inserirCurtida(candidato.id, vaga.id, 'EMPRESA')
+        def curtida = new Curtida(
+            id: result.id as Integer,
             candidato: candidato,
             vaga: vaga,
-            empresa: empresa
+            origemCurtida: 'EMPRESA'
         )
-        curtidas.add(curtida)
+        // Se houve match, marcar como tal
+        if (result.isMatch) {
+            curtida.origemCurtida = 'MATCH'
+        }
         return curtida
     }
 
     List<Curtida> listarTodos() {
-        return curtidas
+        return curtidaDAO.listarTodos()
     }
 
     List<Curtida> listarMatches() {
-        return curtidas.findAll { it.isMatch() }
+        return curtidaDAO.listarMatches()
     }
 
     List<Curtida> listarCurtidasPorEmpresa(Empresa empresa) {
-        return curtidas.findAll { it.vaga?.empresa?.id == empresa.id }
+        return curtidaDAO.listarCurtidasPorEmpresa(empresa.id)
     }
 
     List<Curtida> listarCurtidasPorCandidato(Candidato candidato) {
-        return curtidas.findAll { it.candidato?.id == candidato.id }
+        return curtidaDAO.listarCurtidasPorCandidato(candidato.id)
     }
 }
