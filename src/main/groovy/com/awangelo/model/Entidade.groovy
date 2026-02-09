@@ -10,10 +10,10 @@ trait Entidade {
     List<Competencia> competencias = []
 
     boolean validarEmail() {
-        return email?.contains("@") && email?.contains(".")
+        email?.contains("@") && email?.contains(".")
     }
 
     boolean validarCep() {
-        return cep?.replaceAll("[^0-9]", "")?.length() == 8
+        cep?.replaceAll("[^0-9]", "")?.length() == 8
     }
 }

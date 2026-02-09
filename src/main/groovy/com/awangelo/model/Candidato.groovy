@@ -19,23 +19,23 @@ class Candidato implements Entidade {
 
     Integer getIdade() {
         if (!dataNascimento) return null
-        return Period.between(dataNascimento, LocalDate.now()).years
+        Period.between(dataNascimento, LocalDate.now()).years
     }
 
     @Override
     String toString() {
         String dt = dataNascimento ? dataNascimento.format(DateTimeFormatter.ISO_DATE) : ""
-        return """
-            ID: ${id}
-            Nome: ${nome} ${sobrenome ?: ''}
-            Email: ${email}
-            CPF: ${cpf}
-            Idade: ${getIdade()}
-            Data Nascimento: ${dt}
-            Estado: ${estado}
-            CEP: ${cep}
-            Descricao: ${descricao}
-            Competencias: ${competencias.join(", ")}
-            """.stripIndent() // Remove a indentacao das Strings multi-line
+        """
+        ID: ${id}
+        Nome: ${nome} ${sobrenome ?: ''}
+        Email: ${email}
+        CPF: ${cpf}
+        Idade: ${getIdade()}
+        Data Nascimento: ${dt}
+        Estado: ${estado}
+        CEP: ${cep}
+        Descricao: ${descricao}
+        Competencias: ${competencias.join(", ")}
+        """.stripIndent() // Remove a indentacao das Strings multi-line
     }
 }

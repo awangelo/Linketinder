@@ -10,13 +10,13 @@ class Vaga {
 
     @Override
     String toString() {
-        return """
-            ID: ${id}
-            Nome: ${nome}
-            Descricao: ${descricao}
-            Local: ${localVaga}
-            Empresa: ${empresa?.nome}
-            Competencias: ${competencias.join(", ")}
-            """.stripIndent()
+        """
+        ID: ${id}
+        Nome: ${nome}
+        Descricao: ${descricao}
+        Local: ${localVaga}
+        Empresa: ${empresa?.nome}
+        Competencias: ${competencias.join(", ")}
+        """.stripIndent()
     }
 }

@@ -14,15 +14,15 @@ class VagaService {
     }
 
     List<Vaga> listarTodos() {
-        return vagaDAO.listarTodos(empresaDAO)
+        vagaDAO.listarTodos(empresaDAO)
     }
 
     Vaga buscarPorId(Integer id) {
-        return vagaDAO.buscarPorId(id, empresaDAO)
+        vagaDAO.buscarPorId(id, empresaDAO)
     }
 
     List<Vaga> buscarPorEmpresa(Empresa empresa) {
-        return vagaDAO.listarTodos(empresaDAO).findAll { it.empresa?.id == empresa?.id }
+        vagaDAO.listarTodos(empresaDAO).findAll { it.empresa?.id == empresa?.id }
     }
 
     void adicionar(Vaga vaga) {
@@ -35,6 +35,6 @@ class VagaService {
     }
 
     boolean remover(Integer id) {
-        return vagaDAO.delete(id)
+        vagaDAO.delete(id)
     }
 }

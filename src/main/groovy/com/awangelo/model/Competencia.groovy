@@ -20,6 +20,6 @@ enum Competencia {
 
     @Override
     String toString() {
-        return descricao
+        descricao
     }
 }

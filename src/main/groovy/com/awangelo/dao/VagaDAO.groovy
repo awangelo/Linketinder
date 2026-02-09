@@ -21,12 +21,12 @@ class VagaDAO {
             List<Competencia> competencias = sql.rows('SELECT c.nome FROM competencia c JOIN vaga_competencia vc ON c.id = vc.competencia_id WHERE vc.vaga_id = ?', [vagaId]).collect { rc -> Competencia.valueOf((rc.nome) as String) }
 
             new Vaga(
-                id: vagaId,
-                nome: r.nome as String,
-                descricao: r.descricao as String,
-                localVaga: r.local_vaga as String,
-                empresa: empresa,
-                competencias: competencias
+                    id: vagaId,
+                    nome: r.nome as String,
+                    descricao: r.descricao as String,
+                    localVaga: r.local_vaga as String,
+                    empresa: empresa,
+                    competencias: competencias
             )
         }
     }
@@ -40,19 +40,19 @@ class VagaDAO {
         Empresa empresa = empresaDAO.buscarPorId(empresaId)
         List<Competencia> competencias = sql.rows('SELECT c.nome FROM competencia c JOIN vaga_competencia vc ON c.id = vc.competencia_id WHERE vc.vaga_id = ?', [vagaId]).collect { rc -> Competencia.valueOf((rc.nome) as String) }
 
-        return new Vaga(
-            id: vagaId,
-            nome: r.nome as String,
-            descricao: r.descricao as String,
-            localVaga: r.local_vaga as String,
-            empresa: empresa,
-            competencias: competencias
+        new Vaga(
+                id: vagaId,
+                nome: r.nome as String,
+                descricao: r.descricao as String,
+                localVaga: r.local_vaga as String,
+                empresa: empresa,
+                competencias: competencias
         )
     }
 
     Integer inserir(Vaga vaga) {
         return sql.withTransaction {
-            def r = sql.firstRow('INSERT INTO vaga (empresa_id, nome, descricao, local_vaga) VALUES (?, ?, ?, ?) RETURNING id', [vaga.empresa.id, vaga.nome, vaga.descricao, vaga.localVaga])
+            GroovyRowResult r = sql.firstRow('INSERT INTO vaga (empresa_id, nome, descricao, local_vaga) VALUES (?, ?, ?, ?) RETURNING id', [vaga.empresa.id, vaga.nome, vaga.descricao, vaga.localVaga])
             Integer vagaId = r?.id as Integer
             if (vaga.competencias) {
                 vaga.competencias.each { comp ->
@@ -60,7 +60,7 @@ class VagaDAO {
                     sql.executeInsert('INSERT INTO vaga_competencia (vaga_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING', [vagaId, compId])
                 }
             }
-            return vagaId
+            vagaId
         }
     }
 
@@ -75,12 +75,12 @@ class VagaDAO {
                     sql.executeInsert('INSERT INTO vaga_competencia (vaga_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING', [vaga.id, compId])
                 }
             }
-            return vaga.id
+            vaga.id
         }
     }
 
     boolean delete(Integer id) {
         Integer affected = sql.executeUpdate('DELETE FROM vaga WHERE id = ?', [id])
-        return affected > 0
+        affected > 0
     }
 }

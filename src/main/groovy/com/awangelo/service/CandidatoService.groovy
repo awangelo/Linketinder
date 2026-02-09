@@ -7,11 +7,11 @@ class CandidatoService {
     private CandidatoDAO candidatoDAO = new CandidatoDAO()
 
     List<Candidato> listarTodos() {
-        return candidatoDAO.listarTodos()
+        candidatoDAO.listarTodos()
     }
 
     Candidato buscarPorId(Integer id) {
-        return candidatoDAO.buscarPorId(id)
+        candidatoDAO.buscarPorId(id)
     }
 
     void adicionar(Candidato candidato) {
@@ -24,6 +24,6 @@ class CandidatoService {
     }
 
     boolean remover(Integer id) {
-        return candidatoDAO.delete(id)
+        candidatoDAO.delete(id)
     }
 }

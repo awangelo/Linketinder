@@ -13,14 +13,14 @@ class EmpresaDAO {
         rows.collect { r ->
             Integer empId = r['id'] as Integer
             new Empresa(
-                id: empId,
-                nome: r.nome as String,
-                email: r.email as String,
-                cnpj: r.cnpj as String,
-                pais: r.pais as String,
-                estado: r.estado as String,
-                cep: r.cep as String,
-                descricao: r.descricao as String
+                    id: empId,
+                    nome: r.nome as String,
+                    email: r.email as String,
+                    cnpj: r.cnpj as String,
+                    pais: r.pais as String,
+                    estado: r.estado as String,
+                    cep: r.cep as String,
+                    descricao: r.descricao as String
             )
         }
     }
@@ -30,37 +30,37 @@ class EmpresaDAO {
         if (!r) return null
 
         Integer empId = r['id'] as Integer
-        return new Empresa(
-            id: empId,
-            nome: r.nome as String,
-            email: r.email as String,
-            cnpj: r.cnpj as String,
-            pais: r.pais as String,
-            estado: r.estado as String,
-            cep: r.cep as String,
-            descricao: r.descricao as String
+        new Empresa(
+                id: empId,
+                nome: r.nome as String,
+                email: r.email as String,
+                cnpj: r.cnpj as String,
+                pais: r.pais as String,
+                estado: r.estado as String,
+                cep: r.cep as String,
+                descricao: r.descricao as String
         )
     }
 
     Integer inserir(Empresa empresa) {
         return sql.withTransaction {
-            def r = sql.firstRow(
-                'INSERT INTO empresa (nome, cnpj, email, pais, estado, cep, descricao, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id',
-                [empresa.nome, empresa.cnpj, empresa.email, empresa.pais, empresa.estado, empresa.cep, empresa.descricao, empresa.senha]
+            GroovyRowResult r = sql.firstRow(
+                    'INSERT INTO empresa (nome, cnpj, email, pais, estado, cep, descricao, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id',
+                    [empresa.nome, empresa.cnpj, empresa.email, empresa.pais, empresa.estado, empresa.cep, empresa.descricao, empresa.senha]
             )
-            return r?.id as Integer
+            r?.id as Integer
         }
     }
 
     Integer update(Empresa empresa) {
         return sql.withTransaction {
             sql.executeUpdate('UPDATE empresa SET nome = ?, email = ?, cnpj = ?, pais = ?, estado = ?, cep = ?, descricao = ?, senha = ? WHERE id = ?', [empresa.nome, empresa.email, empresa.cnpj, empresa.pais, empresa.estado, empresa.cep, empresa.descricao, empresa.senha, empresa.id])
-            return empresa.id
+            empresa.id
         }
     }
 
     boolean delete(Integer id) {
         Integer affected = sql.executeUpdate('DELETE FROM empresa WHERE id = ?', [id])
-        return affected > 0
+        affected > 0
     }
 }

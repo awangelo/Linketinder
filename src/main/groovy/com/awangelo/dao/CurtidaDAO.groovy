@@ -22,7 +22,7 @@ class CurtidaDAO {
             String oposta = origem == 'CANDIDATO' ? 'EMPRESA' : 'CANDIDATO'
             GroovyRowResult other = sql.firstRow('SELECT id FROM curtida WHERE candidato_id = ? AND vaga_id = ? AND origem_curtida = ?', [candidatoId, vagaId, oposta])
 
-            return [id: id, isMatch: other != null]
+            [id: id, isMatch: other != null]
         }
     }
 
@@ -34,10 +34,10 @@ class CurtidaDAO {
             Vaga vaga = vagaDAO.buscarPorId(r.vaga_id as Integer, empresaDAO)
 
             new Curtida(
-                id: r.id as Integer,
-                candidato: candidato,
-                vaga: vaga,
-                origemCurtida: r.origem_curtida as String
+                    id: r.id as Integer,
+                    candidato: candidato,
+                    vaga: vaga,
+                    origemCurtida: r.origem_curtida as String
             )
         }
     }
@@ -55,10 +55,10 @@ class CurtidaDAO {
             Vaga vaga = vagaDAO.buscarPorId(r.vaga_id as Integer, empresaDAO)
 
             new Curtida(
-                id: r.id as Integer,
-                candidato: candidato,
-                vaga: vaga,
-                origemCurtida: 'MATCH'
+                    id: r.id as Integer,
+                    candidato: candidato,
+                    vaga: vaga,
+                    origemCurtida: 'MATCH'
             )
         }
     }
@@ -71,10 +71,10 @@ class CurtidaDAO {
             Vaga vaga = vagaDAO.buscarPorId(r.vaga_id as Integer, empresaDAO)
 
             new Curtida(
-                id: r.id as Integer,
-                candidato: candidato,
-                vaga: vaga,
-                origemCurtida: r.origem_curtida as String
+                    id: r.id as Integer,
+                    candidato: candidato,
+                    vaga: vaga,
+                    origemCurtida: r.origem_curtida as String
             )
         }
     }
@@ -87,16 +87,16 @@ class CurtidaDAO {
             Vaga vaga = vagaDAO.buscarPorId(r.vaga_id as Integer, empresaDAO)
 
             new Curtida(
-                id: r.id as Integer,
-                candidato: candidato,
-                vaga: vaga,
-                origemCurtida: r.origem_curtida as String
+                    id: r.id as Integer,
+                    candidato: candidato,
+                    vaga: vaga,
+                    origemCurtida: r.origem_curtida as String
             )
         }
     }
 
     boolean delete(Integer id) {
         Integer affected = sql.executeUpdate('DELETE FROM curtida WHERE id = ?', [id])
-        return affected > 0
+        affected > 0
     }
 }

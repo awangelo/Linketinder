@@ -13,8 +13,8 @@ class CurtidaService {
         if (!candidato?.id || !vaga?.id) {
             throw new IllegalArgumentException("Candidato ou Vaga invalidos")
         }
-        def result = curtidaDAO.inserirCurtida(candidato.id, vaga.id, 'CANDIDATO')
-        def curtida = new Curtida(
+        Map result = curtidaDAO.inserirCurtida(candidato.id, vaga.id, 'CANDIDATO')
+        Curtida curtida = new Curtida(
             id: result.id as Integer,
             candidato: candidato,
             vaga: vaga,
@@ -24,15 +24,15 @@ class CurtidaService {
         if (result.isMatch) {
             curtida.origemCurtida = 'MATCH'
         }
-        return curtida
+        curtida
     }
 
     Curtida empresaCurteCandidato(Empresa empresa, Candidato candidato, Vaga vaga) {
         if (!candidato?.id || !vaga?.id) {
             throw new IllegalArgumentException("Candidato ou Vaga invalidos")
         }
-        def result = curtidaDAO.inserirCurtida(candidato.id, vaga.id, 'EMPRESA')
-        def curtida = new Curtida(
+        Map result = curtidaDAO.inserirCurtida(candidato.id, vaga.id, 'EMPRESA')
+        Curtida curtida = new Curtida(
             id: result.id as Integer,
             candidato: candidato,
             vaga: vaga,
@@ -42,22 +42,22 @@ class CurtidaService {
         if (result.isMatch) {
             curtida.origemCurtida = 'MATCH'
         }
-        return curtida
+        curtida
     }
 
     List<Curtida> listarTodos() {
-        return curtidaDAO.listarTodos()
+        curtidaDAO.listarTodos()
     }
 
     List<Curtida> listarMatches() {
-        return curtidaDAO.listarMatches()
+        curtidaDAO.listarMatches()
     }
 
     List<Curtida> listarCurtidasPorEmpresa(Empresa empresa) {
-        return curtidaDAO.listarCurtidasPorEmpresa(empresa.id)
+        curtidaDAO.listarCurtidasPorEmpresa(empresa.id)
     }
 
     List<Curtida> listarCurtidasPorCandidato(Candidato candidato) {
-        return curtidaDAO.listarCurtidasPorCandidato(candidato.id)
+        curtidaDAO.listarCurtidasPorCandidato(candidato.id)
     }
 }

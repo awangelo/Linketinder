@@ -11,11 +11,11 @@ class EmpresaService {
     }
 
     List<Empresa> listarTodos() {
-        return empresaDAO.listarTodos()
+        empresaDAO.listarTodos()
     }
 
     Empresa buscarPorId(Integer id) {
-        return empresaDAO.buscarPorId(id)
+        empresaDAO.buscarPorId(id)
     }
 
     void adicionar(Empresa empresa) {
@@ -28,6 +28,6 @@ class EmpresaService {
     }
 
     boolean remover(Integer id) {
-        return empresaDAO.delete(id)
+        empresaDAO.delete(id)
     }
 }
