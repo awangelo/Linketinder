@@ -5,8 +5,16 @@ import groovy.sql.Sql
 import com.awangelo.db.ConnectionFactory
 import com.awangelo.model.Empresa
 
-class EmpresaDAO {
-    private Sql sql = ConnectionFactory.getSql()
+class EmpresaDAO implements IEmpresaDAO {
+    private Sql sql
+
+    EmpresaDAO(Sql sql) {
+        this.sql = sql
+    }
+
+    EmpresaDAO() {
+        this(ConnectionFactory.getSql())
+    }
 
     List<Empresa> listarTodos() {
         List<GroovyRowResult> rows = sql.rows('SELECT id, nome, email, cnpj, pais, estado, cep, descricao FROM empresa')

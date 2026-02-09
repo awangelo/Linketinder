@@ -7,11 +7,24 @@ import groovy.sql.Sql
 import com.awangelo.db.ConnectionFactory
 import com.awangelo.model.Curtida
 
-class CurtidaDAO {
-    private Sql sql = ConnectionFactory.getSql()
-    private CandidatoDAO candidatoDAO = new CandidatoDAO()
-    private EmpresaDAO empresaDAO = new EmpresaDAO()
-    private VagaDAO vagaDAO = new VagaDAO()
+class CurtidaDAO implements ICurtidaDAO {
+    private Sql sql
+    private ICandidatoDAO candidatoDAO
+    private IVagaDAO vagaDAO
+
+    CurtidaDAO(Sql sql, ICandidatoDAO candidatoDAO, IVagaDAO vagaDAO) {
+        this.sql = sql
+        this.candidatoDAO = candidatoDAO
+        this.vagaDAO = vagaDAO
+    }
+
+    CurtidaDAO() {
+        this.sql = ConnectionFactory.getSql()
+        def competenciaDAO = new CompetenciaDAO(this.sql)
+        def empresaDAO = new EmpresaDAO(this.sql)
+        this.candidatoDAO = new CandidatoDAO(this.sql, competenciaDAO)
+        this.vagaDAO = new VagaDAO(this.sql, competenciaDAO, empresaDAO)
+    }
 
     Map inserirCurtida(Integer candidatoId, Integer vagaId, String origem) {
         return sql.withTransaction {
@@ -31,7 +44,7 @@ class CurtidaDAO {
 
         rows.collect { r ->
             Candidato candidato = candidatoDAO.buscarPorId(r.candidato_id as Integer)
-            Vaga vaga = vagaDAO.buscarPorId(r.vaga_id as Integer, empresaDAO)
+            Vaga vaga = vagaDAO.buscarPorId(r.vaga_id as Integer)
 
             new Curtida(
                     id: r.id as Integer,
@@ -52,7 +65,7 @@ class CurtidaDAO {
 
         rows.collect { r ->
             Candidato candidato = candidatoDAO.buscarPorId(r.candidato_id as Integer)
-            Vaga vaga = vagaDAO.buscarPorId(r.vaga_id as Integer, empresaDAO)
+            Vaga vaga = vagaDAO.buscarPorId(r.vaga_id as Integer)
 
             new Curtida(
                     id: r.id as Integer,
@@ -68,7 +81,7 @@ class CurtidaDAO {
 
         rows.collect { r ->
             Candidato candidato = candidatoDAO.buscarPorId(r.candidato_id as Integer)
-            Vaga vaga = vagaDAO.buscarPorId(r.vaga_id as Integer, empresaDAO)
+            Vaga vaga = vagaDAO.buscarPorId(r.vaga_id as Integer)
 
             new Curtida(
                     id: r.id as Integer,
@@ -84,7 +97,7 @@ class CurtidaDAO {
 
         rows.collect { r ->
             Candidato candidato = candidatoDAO.buscarPorId(r.candidato_id as Integer)
-            Vaga vaga = vagaDAO.buscarPorId(r.vaga_id as Integer, empresaDAO)
+            Vaga vaga = vagaDAO.buscarPorId(r.vaga_id as Integer)
 
             new Curtida(
                     id: r.id as Integer,

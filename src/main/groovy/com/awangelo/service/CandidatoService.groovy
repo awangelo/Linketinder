@@ -1,10 +1,19 @@
 package com.awangelo.service
 
 import com.awangelo.model.Candidato
+import com.awangelo.dao.ICandidatoDAO
 import com.awangelo.dao.CandidatoDAO
 
 class CandidatoService {
-    private CandidatoDAO candidatoDAO = new CandidatoDAO()
+    private ICandidatoDAO candidatoDAO
+
+    CandidatoService(ICandidatoDAO candidatoDAO) {
+        this.candidatoDAO = candidatoDAO
+    }
+
+    CandidatoService() {
+        this.candidatoDAO = new CandidatoDAO()
+    }
 
     List<Candidato> listarTodos() {
         candidatoDAO.listarTodos()

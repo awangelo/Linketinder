@@ -1,13 +1,18 @@
 package com.awangelo.service
 
 import com.awangelo.model.Empresa
+import com.awangelo.dao.IEmpresaDAO
 import com.awangelo.dao.EmpresaDAO
 
 class EmpresaService {
-    private EmpresaDAO empresaDAO = new EmpresaDAO()
+    private IEmpresaDAO empresaDAO
+
+    EmpresaService(IEmpresaDAO empresaDAO) {
+        this.empresaDAO = empresaDAO
+    }
 
     EmpresaService() {
-        // DAO-backed
+        this.empresaDAO = new EmpresaDAO()
     }
 
     List<Empresa> listarTodos() {

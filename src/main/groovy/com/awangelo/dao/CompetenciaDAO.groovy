@@ -5,8 +5,16 @@ import groovy.sql.Sql
 import com.awangelo.db.ConnectionFactory
 import com.awangelo.model.Competencia
 
-class CompetenciaDAO {
-    private Sql sql = ConnectionFactory.getSql()
+class CompetenciaDAO implements ICompetenciaDAO {
+    private Sql sql
+
+    CompetenciaDAO(Sql sql) {
+        this.sql = sql
+    }
+
+    CompetenciaDAO() {
+        this(ConnectionFactory.getSql())
+    }
 
     // Retorna ID da competencia existente ou cria e retorna o id novo
     Integer getIdOrCreate(Competencia competencia) {

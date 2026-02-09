@@ -4,10 +4,19 @@ import com.awangelo.model.Curtida
 import com.awangelo.model.Candidato
 import com.awangelo.model.Empresa
 import com.awangelo.model.Vaga
+import com.awangelo.dao.ICurtidaDAO
 import com.awangelo.dao.CurtidaDAO
 
 class CurtidaService {
-    private CurtidaDAO curtidaDAO = new CurtidaDAO()
+    private ICurtidaDAO curtidaDAO
+
+    CurtidaService(ICurtidaDAO curtidaDAO) {
+        this.curtidaDAO = curtidaDAO
+    }
+
+    CurtidaService() {
+        this.curtidaDAO = new CurtidaDAO()
+    }
 
     Curtida candidatoCurteVaga(Candidato candidato, Vaga vaga) {
         if (!candidato?.id || !vaga?.id) {

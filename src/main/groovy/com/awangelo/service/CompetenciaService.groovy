@@ -1,10 +1,19 @@
 package com.awangelo.service
 
 import com.awangelo.model.Competencia
+import com.awangelo.dao.ICompetenciaDAO
 import com.awangelo.dao.CompetenciaDAO
 
 class CompetenciaService {
-    private CompetenciaDAO competenciaDAO = new CompetenciaDAO()
+    private ICompetenciaDAO competenciaDAO
+
+    CompetenciaService(ICompetenciaDAO competenciaDAO) {
+        this.competenciaDAO = competenciaDAO
+    }
+
+    CompetenciaService() {
+        this.competenciaDAO = new CompetenciaDAO()
+    }
 
     List<Competencia> listarTodos() {
         competenciaDAO.listarTodos()

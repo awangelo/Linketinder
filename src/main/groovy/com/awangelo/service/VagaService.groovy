@@ -2,27 +2,30 @@ package com.awangelo.service
 
 import com.awangelo.model.Vaga
 import com.awangelo.model.Empresa
+import com.awangelo.dao.IVagaDAO
 import com.awangelo.dao.VagaDAO
-import com.awangelo.dao.EmpresaDAO
 
 class VagaService {
-    private VagaDAO vagaDAO = new VagaDAO()
-    private EmpresaDAO empresaDAO = new EmpresaDAO()
+    private IVagaDAO vagaDAO
+
+    VagaService(IVagaDAO vagaDAO) {
+        this.vagaDAO = vagaDAO
+    }
 
     VagaService() {
-        // compatibilidade
+        this.vagaDAO = new VagaDAO()
     }
 
     List<Vaga> listarTodos() {
-        vagaDAO.listarTodos(empresaDAO)
+        vagaDAO.listarTodos()
     }
 
     Vaga buscarPorId(Integer id) {
-        vagaDAO.buscarPorId(id, empresaDAO)
+        vagaDAO.buscarPorId(id)
     }
 
     List<Vaga> buscarPorEmpresa(Empresa empresa) {
-        vagaDAO.listarTodos(empresaDAO).findAll { it.empresa?.id == empresa?.id }
+        vagaDAO.listarTodos().findAll { it.empresa?.id == empresa?.id }
     }
 
     void adicionar(Vaga vaga) {

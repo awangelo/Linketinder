@@ -7,11 +7,24 @@ import com.awangelo.db.ConnectionFactory
 import com.awangelo.model.Vaga
 import com.awangelo.model.Competencia
 
-class VagaDAO {
-    private Sql sql = ConnectionFactory.getSql()
-    private CompetenciaDAO competenciaDAO = new CompetenciaDAO()
+class VagaDAO implements IVagaDAO {
+    private Sql sql
+    private ICompetenciaDAO competenciaDAO
+    private IEmpresaDAO empresaDAO
 
-    List<Vaga> listarTodos(EmpresaDAO empresaDAO) {
+    VagaDAO(Sql sql, ICompetenciaDAO competenciaDAO, IEmpresaDAO empresaDAO) {
+        this.sql = sql
+        this.competenciaDAO = competenciaDAO
+        this.empresaDAO = empresaDAO
+    }
+
+    VagaDAO() {
+        this.sql = ConnectionFactory.getSql()
+        this.competenciaDAO = new CompetenciaDAO(this.sql)
+        this.empresaDAO = new EmpresaDAO(this.sql)
+    }
+
+    List<Vaga> listarTodos() {
         List<GroovyRowResult> rows = sql.rows('SELECT id, nome, descricao, local_vaga, empresa_id FROM vaga')
 
         rows.collect { r ->
@@ -31,7 +44,7 @@ class VagaDAO {
         }
     }
 
-    Vaga buscarPorId(Integer id, EmpresaDAO empresaDAO) {
+    Vaga buscarPorId(Integer id) {
         GroovyRowResult r = sql.firstRow('SELECT id, nome, descricao, local_vaga, empresa_id FROM vaga WHERE id = ?', [id])
         if (!r) return null
 

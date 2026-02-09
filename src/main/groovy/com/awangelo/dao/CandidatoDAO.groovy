@@ -8,9 +8,19 @@ import com.awangelo.model.Competencia
 
 import java.time.LocalDate
 
-class CandidatoDAO {
-    private Sql sql = ConnectionFactory.getSql()
-    private CompetenciaDAO competenciaDAO = new CompetenciaDAO()
+class CandidatoDAO implements ICandidatoDAO {
+    private Sql sql
+    private ICompetenciaDAO competenciaDAO
+
+    CandidatoDAO(Sql sql, ICompetenciaDAO competenciaDAO) {
+        this.sql = sql
+        this.competenciaDAO = competenciaDAO
+    }
+
+    CandidatoDAO() {
+        this.sql = ConnectionFactory.getSql()
+        this.competenciaDAO = new CompetenciaDAO(this.sql)
+    }
 
     List<Candidato> listarTodos() {
         List<GroovyRowResult> rows = sql.rows('SELECT id, nome, sobrenome, email, cpf, data_nascimento, pais, estado, cep, descricao FROM candidato')
