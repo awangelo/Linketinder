@@ -14,7 +14,7 @@ class ConnectionFactory {
 
             sqlInstance = Sql.newInstance(url, user, pass, driver)
         }
-        return sqlInstance
+        sqlInstance
     }
 
     static void close() {

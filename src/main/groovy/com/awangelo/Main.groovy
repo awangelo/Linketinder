@@ -1,5 +1,6 @@
 package com.awangelo
 
+import com.awangelo.db.ConnectionFactory
 import com.awangelo.model.Candidato
 import com.awangelo.model.Empresa
 import com.awangelo.model.Vaga
@@ -37,6 +38,8 @@ class Main {
                 default: println "Opcao invalida!"
             }
         }
+
+        ConnectionFactory.close()
     }
 
     static void exibirMenuPrincipal() {
