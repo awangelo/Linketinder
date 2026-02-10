@@ -3,25 +3,46 @@ package com.awangelo.db
 import groovy.sql.Sql
 
 class ConnectionFactory {
-    private static Sql sqlInstance
+    private static IDatabaseConnection databaseConnection
+
+    enum DatabaseType {
+        POSTGRESQL
+    }
+
+    static IDatabaseConnection createConnection(DatabaseType type = DatabaseType.POSTGRESQL) {
+        if (databaseConnection == null) {
+            synchronized (ConnectionFactory.class) {
+                if (databaseConnection == null) {
+                    switch (type) {
+                        case DatabaseType.POSTGRESQL:
+                            databaseConnection = PostgreSQLConnection.getInstance()
+                            break
+                        default:
+                            databaseConnection = PostgreSQLConnection.getInstance()
+                    }
+                }
+            }
+        }
+        databaseConnection
+    }
 
     static Sql getSql() {
-        if (sqlInstance == null) {
-            String url = System.getenv('LINKETINDER_DB_URL') ?: 'jdbc:postgresql://localhost:5432/linketinder'
-            String user = System.getenv('LINKETINDER_DB_USER') ?: 'admin'
-            String pass = System.getenv('LINKETINDER_DB_PASS') ?: 'admin'
-            String driver = System.getenv('LINKETINDER_DB_DRIVER') ?: 'org.postgresql.Driver'
+        String dbTypeEnv = System.getenv('LINKETINDER_DB_TYPE')?.toUpperCase()
+        DatabaseType type = DatabaseType.POSTGRESQL
 
-            sqlInstance = Sql.newInstance(url, user, pass, driver)
+        if (dbTypeEnv) {
+            try {
+                type = DatabaseType.valueOf(dbTypeEnv)
+            } catch (IllegalArgumentException ignored) {
+                println "Tipo de banco '${dbTypeEnv}' inválido. Usando PostgreSQL por padrão."
+            }
         }
-        sqlInstance
+
+        createConnection(type).getSql()
     }
 
     static void close() {
-        try {
-            sqlInstance?.close()
-        } finally {
-            sqlInstance = null
-        }
+        databaseConnection?.close()
+        databaseConnection = null
     }
 }
