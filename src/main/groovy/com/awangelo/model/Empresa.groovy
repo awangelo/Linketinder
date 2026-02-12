@@ -20,7 +20,6 @@ class Empresa implements Entidade {
         Estado: ${estado}
         CEP: ${cep}
         Descricao: ${descricao}
-        Competencias desejadas: ${competencias.join(", ")}
-        """.stripIndent() // Remove a indentacao das Strings multi-line
+        """.stripIndent()
     }
 }

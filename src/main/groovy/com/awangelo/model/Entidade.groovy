@@ -7,7 +7,6 @@ trait Entidade {
     String estado
     String cep
     String descricao
-    List<Competencia> competencias = []
 
     boolean validarEmail() {
         email?.contains("@") && email?.contains(".")

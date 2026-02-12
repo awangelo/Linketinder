@@ -12,6 +12,7 @@ class Candidato implements Entidade {
     String senha
     String telefone
     String linkedin
+    List<Competencia> competencias = []
 
     boolean validarCpf() {
         return cpf?.replaceAll("[^0-9]", "")?.length() == 11
