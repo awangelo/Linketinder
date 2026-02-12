@@ -15,12 +15,10 @@ import io.undertow.Undertow
 class Main {
 
     static void main(String[] args) {
-        // Inicializar Services
         CandidatoService candidatoService = new CandidatoService(new CandidatoDAO())
         EmpresaService empresaService = new EmpresaService(new EmpresaDAO())
         VagaService vagaService = new VagaService(new VagaDAO())
 
-        // Inicializar Controllers com injeção de dependência
         CandidatoController candidatoController = new CandidatoController(candidatoService)
         EmpresaController empresaController = new EmpresaController(empresaService)
         VagaController vagaController = new VagaController(vagaService)
