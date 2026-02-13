@@ -21,7 +21,7 @@ class Main {
 
         CandidatoController candidatoController = new CandidatoController(candidatoService)
         EmpresaController empresaController = new EmpresaController(empresaService)
-        VagaController vagaController = new VagaController(vagaService)
+        VagaController vagaController = new VagaController(vagaService, empresaService)
 
         Undertow.builder()
                 .addHttpListener(8080, "0.0.0.0")

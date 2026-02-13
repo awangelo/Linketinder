@@ -12,11 +12,34 @@
 
 ## Estrutura do Projeto
 ```
-src/
+src/main/groovy/com/awangelo/
 ├── Main.groovy
-├── model/    # Entidades do domínio
-└── service/  # Lógica de negócio
+├── controller/   # Controllers REST (Candidato, Empresa, Vaga)
+├── dao/          # Data Access Objects (PostgreSQL)
+├── db/           # Gerenciamento de conexão com BD
+├── model/        # Entidades do domínio (Candidato, Empresa, Vaga, Competencia)
+├── router/       # Configuração de rotas HTTP
+├── service/      # Lógica de negócio
+└── util/         # Utilitários JSON e Validações
 ```
+
+### Endpoints
+  - `GET/POST /candidatos` - Listar e criar candidatos
+  - `GET /candidatos/{id}` - Buscar candidato por ID
+  - `GET/POST /empresas` - Listar e criar empresas
+  - `GET /empresas/{id}` - Buscar empresa por ID
+  - `GET/POST /vagas` - Listar e criar vagas
+  - `GET /vagas/{id}` - Buscar vaga por ID
+
+### Validações Implementadas
+- **Email**: Formato válido (contém @ e .)
+- **CPF**: 11 dígitos numéricos
+- **CNPJ**: 14 dígitos numéricos
+- **CEP**: 8 dígitos numéricos
+- **Senha**: Mínimo 6 caracteres (não retornada nas respostas)
+- **Idade**: Mínimo 18 anos
+- **Competências**: Válidas do enum
+- **Empresa (Vaga)**: Empresa deve existir ao criar vaga
 
 ## Frontend
 
