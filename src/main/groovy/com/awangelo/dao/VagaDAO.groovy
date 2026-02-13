@@ -64,17 +64,18 @@ class VagaDAO implements IVagaDAO {
     }
 
     Integer inserir(Vaga vaga) {
-        return sql.withTransaction {
+        Integer vagaId = null
+        sql.withTransaction {
             GroovyRowResult r = sql.firstRow('INSERT INTO vaga (empresa_id, nome, descricao, local_vaga) VALUES (?, ?, ?, ?) RETURNING id', [vaga.empresa.id, vaga.nome, vaga.descricao, vaga.localVaga])
-            Integer vagaId = r?.id as Integer
+            vagaId = r?.id as Integer
             if (vaga.competencias) {
                 vaga.competencias.each { comp ->
                     Integer compId = competenciaDAO.getIdOrCreate(comp)
                     sql.executeInsert('INSERT INTO vaga_competencia (vaga_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING', [vagaId, compId])
                 }
             }
-            vagaId
         }
+        return vagaId
     }
 
     Integer update(Vaga vaga) {

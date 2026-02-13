@@ -68,17 +68,19 @@ class CandidatoDAO implements ICandidatoDAO {
     }
 
     Integer inserir(Candidato candidato) {
-        return sql.withTransaction {
+        Integer candId = null
+        sql.withTransaction {
             GroovyRowResult r = sql.firstRow('INSERT INTO candidato (nome, sobrenome, data_nascimento, email, cpf, pais, estado, cep, descricao, senha, telefone, linkedin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id', [candidato.nome, candidato.sobrenome, candidato.dataNascimento, candidato.email, candidato.cpf, candidato.pais, candidato.estado, candidato.cep, candidato.descricao, candidato.senha, candidato.telefone, candidato.linkedin])
-            Integer candId = r?.id as Integer
+
+            candId = r?.id as Integer
             if (candidato.competencias) {
                 candidato.competencias.each { comp ->
                     Integer compId = competenciaDAO.getIdOrCreate(comp)
                     sql.executeInsert('INSERT INTO candidato_competencia (candidato_id, competencia_id) VALUES (?, ?) ON CONFLICT DO NOTHING', [candId, compId])
                 }
             }
-            candId
         }
+        candId
     }
 
     Integer update(Candidato candidato) {

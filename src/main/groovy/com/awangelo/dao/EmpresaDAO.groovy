@@ -51,13 +51,11 @@ class EmpresaDAO implements IEmpresaDAO {
     }
 
     Integer inserir(Empresa empresa) {
-        return sql.withTransaction {
-            GroovyRowResult r = sql.firstRow(
-                    'INSERT INTO empresa (nome, cnpj, email, pais, estado, cep, descricao, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id',
-                    [empresa.nome, empresa.cnpj, empresa.email, empresa.pais, empresa.estado, empresa.cep, empresa.descricao, empresa.senha]
-            )
-            r?.id as Integer
-        }
+        GroovyRowResult r = sql.firstRow(
+                'INSERT INTO empresa (nome, cnpj, email, pais, estado, cep, descricao, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id',
+                [empresa.nome, empresa.cnpj, empresa.email, empresa.pais, empresa.estado, empresa.cep, empresa.descricao, empresa.senha]
+        )
+        r?.id as Integer
     }
 
     Integer update(Empresa empresa) {

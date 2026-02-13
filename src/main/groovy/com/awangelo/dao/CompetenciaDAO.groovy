@@ -16,11 +16,11 @@ class CompetenciaDAO implements ICompetenciaDAO {
         this(ConnectionFactory.getSql())
     }
 
-    // Retorna ID da competencia existente ou cria e retorna o id novo
+    // Retorna ID da competencia existente ou cria e retorna o ID novo
     Integer getIdOrCreate(Competencia competencia) {
         GroovyRowResult row = sql.firstRow('SELECT id FROM competencia WHERE nome = ?', [competencia.name()])
         if (row?.id) {
-            row.id as Integer
+            return row.id as Integer
         }
 
         // Inserir novo
